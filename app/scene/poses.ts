@@ -16,11 +16,11 @@ type Path = {
 
 const paths: Record<SceneRoute, Path> = {
   home: {
-    radius: [9.4, 1.58],
-    azimuth: [0.46 * Math.PI, 0.16 * Math.PI],
-    polar: [1.12, 1.4],
-    lookY: [0.45, 0.95],
-    fov: [42, 26],
+    radius: [9.4, 3.05],
+    azimuth: [0.46 * Math.PI, 0.24 * Math.PI],
+    polar: [1.12, 1.2],
+    lookY: [0.45, 0.85],
+    fov: [42, 32],
   },
   blog: {
     radius: [8.2, 2.15],

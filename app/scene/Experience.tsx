@@ -13,15 +13,15 @@ import { Terrain } from "./Terrain";
 function Lights() {
   return (
     <>
-      <ambientLight intensity={0.06} color="#7a7a82" />
+      <ambientLight intensity={0.1} color="#7a7a82" />
       <directionalLight
         position={[3.4, 5.2, 2.4]}
-        intensity={0.35}
+        intensity={0.55}
         color="#b4b4bc"
       />
       <directionalLight
         position={[-4.2, 1.8, -3.1]}
-        intensity={1.35}
+        intensity={1.6}
         color="#d0d0d6"
       />
       <pointLight position={[0.4, 0.3, 2.2]} intensity={0.12} color="#8c8c94" />

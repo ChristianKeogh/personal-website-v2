@@ -7,9 +7,9 @@ export function HeroBox() {
       <mesh>
         <boxGeometry args={[0.72, 1.85, 0.46]} />
         <meshStandardMaterial
-          color="#141416"
-          metalness={0.38}
-          roughness={0.62}
+          color="#2a2a30"
+          metalness={0.28}
+          roughness={0.7}
         />
       </mesh>
       <mesh scale={1.02}>
