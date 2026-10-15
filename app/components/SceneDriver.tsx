@@ -2,8 +2,8 @@
 
 import {
   routeFromPathname,
-  setHomeProgress,
   setSceneRoute,
+  setScrollProgress,
 } from "@/app/scene/state";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -18,22 +18,19 @@ export function SceneDriver() {
   useEffect(() => {
     const route = routeFromPathname(pathname);
     setSceneRoute(route);
-
-    if (route !== "home") {
-      setHomeProgress(0);
-      return;
-    }
+    setScrollProgress(0);
 
     const trigger = ScrollTrigger.create({
       trigger: document.documentElement,
       start: "top top",
       end: "bottom bottom",
-      onUpdate: (self) => setHomeProgress(self.progress),
+      onUpdate: (self) => setScrollProgress(self.progress),
     });
 
-    requestAnimationFrame(() => ScrollTrigger.refresh());
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
 
     return () => {
+      cancelAnimationFrame(id);
       trigger.kill();
     };
   }, [pathname]);

@@ -6,33 +6,42 @@ export type Pose = {
   fov: number;
 };
 
-const homeStart: Pose = {
-  position: [2.15, 1.05, 3.55],
-  target: [0, 0.85, 0],
-  fov: 36,
+type Path = {
+  radius: [number, number];
+  azimuth: [number, number];
+  polar: [number, number];
+  lookY: [number, number];
+  fov: [number, number];
 };
 
-const homeEnd: Pose = {
-  position: [2.85, 0.55, 2.15],
-  target: [0, 0.95, 0],
-  fov: 34,
-};
-
-const routes: Record<Exclude<SceneRoute, "home">, Pose> = {
+const paths: Record<SceneRoute, Path> = {
+  home: {
+    radius: [9.4, 1.58],
+    azimuth: [0.46 * Math.PI, 0.16 * Math.PI],
+    polar: [1.12, 1.4],
+    lookY: [0.45, 0.95],
+    fov: [42, 26],
+  },
   blog: {
-    position: [-2.4, 1.55, 2.9],
-    target: [0, 0.9, 0],
-    fov: 32,
+    radius: [8.2, 2.15],
+    azimuth: [1.08 * Math.PI, 0.92 * Math.PI],
+    polar: [1.05, 1.28],
+    lookY: [0.7, 0.95],
+    fov: [38, 28],
   },
   art: {
-    position: [0.15, 2.55, 4.35],
-    target: [0, 0.35, 0],
-    fov: 40,
+    radius: [10.2, 3.1],
+    azimuth: [0.08 * Math.PI, -0.12 * Math.PI],
+    polar: [0.72, 0.95],
+    lookY: [0.2, 0.55],
+    fov: [44, 32],
   },
   education: {
-    position: [3.35, 0.7, 1.35],
-    target: [0, 0.95, 0],
-    fov: 30,
+    radius: [7.6, 1.85],
+    azimuth: [-0.22 * Math.PI, -0.05 * Math.PI],
+    polar: [1.22, 1.38],
+    lookY: [0.7, 1.0],
+    fov: [36, 27],
   },
 };
 
@@ -40,25 +49,24 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function blendPose(a: Pose, b: Pose, t: number): Pose {
-  return {
-    position: [
-      lerp(a.position[0], b.position[0], t),
-      lerp(a.position[1], b.position[1], t),
-      lerp(a.position[2], b.position[2], t),
-    ],
-    target: [
-      lerp(a.target[0], b.target[0], t),
-      lerp(a.target[1], b.target[1], t),
-      lerp(a.target[2], b.target[2], t),
-    ],
-    fov: lerp(a.fov, b.fov, t),
-  };
+function easeInOut(t: number) {
+  return t < 0.5 ? 2 * t * t : 1 - (2 - 2 * t) ** 2 / 2;
 }
 
-export function poseFor(route: SceneRoute, homeProgress: number): Pose {
-  if (route === "home") {
-    return blendPose(homeStart, homeEnd, homeProgress);
-  }
-  return routes[route];
+export function poseFor(route: SceneRoute, progress: number): Pose {
+  const path = paths[route];
+  const t = easeInOut(Math.min(1, Math.max(0, progress)));
+  const radius = lerp(path.radius[0], path.radius[1], t);
+  const azimuth = lerp(path.azimuth[0], path.azimuth[1], t);
+  const polar = lerp(path.polar[0], path.polar[1], t);
+  const y = Math.max(0.42, radius * Math.cos(polar));
+  return {
+    position: [
+      radius * Math.sin(polar) * Math.cos(azimuth),
+      y,
+      radius * Math.sin(polar) * Math.sin(azimuth),
+    ],
+    target: [0, lerp(path.lookY[0], path.lookY[1], t), 0],
+    fov: lerp(path.fov[0], path.fov[1], t),
+  };
 }

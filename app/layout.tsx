@@ -1,5 +1,4 @@
-import Footer from "./components/footer";
-import { Navbar } from "./components/nav";
+import { AppFrame } from "./components/AppFrame";
 import { SceneDriver } from "./components/SceneDriver";
 import { SmoothScroll } from "./components/SmoothScroll";
 import { SceneCanvas } from "./scene/SceneCanvas";
@@ -46,11 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SceneCanvas />
         <SmoothScroll />
         <SceneDriver />
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 md:px-10">
-          <Navbar />
-          <main className="w-full max-w-xl flex-1 pt-4 lg:pt-8">{children}</main>
-          <Footer />
-        </div>
+        <AppFrame>{children}</AppFrame>
       </body>
     </html>
   );

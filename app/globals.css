@@ -33,6 +33,14 @@ body {
   color: var(--foreground);
 }
 
+.hud {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #5c5c5c;
+}
+
 ::selection {
   background-color: #262626;
   color: #a3a3a3;

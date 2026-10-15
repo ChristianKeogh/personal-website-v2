@@ -4,7 +4,7 @@ export type SceneRoute = "home" | "blog" | "art" | "education";
 
 export type SceneState = {
   route: SceneRoute;
-  homeProgress: number;
+  scrollProgress: number;
   quality: number;
 };
 
@@ -12,7 +12,7 @@ const listeners = new Set<() => void>();
 
 let state: SceneState = {
   route: "home",
-  homeProgress: 0,
+  scrollProgress: 0,
   quality: 1,
 };
 
@@ -35,9 +35,9 @@ export function setSceneRoute(route: SceneRoute) {
   emit();
 }
 
-export function setHomeProgress(homeProgress: number) {
-  if (state.homeProgress === homeProgress) return;
-  state = { ...state, homeProgress };
+export function setScrollProgress(scrollProgress: number) {
+  if (state.scrollProgress === scrollProgress) return;
+  state = { ...state, scrollProgress };
   emit();
 }
 

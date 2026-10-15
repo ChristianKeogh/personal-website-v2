@@ -1,26 +1,24 @@
 "use client";
 
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
-import type { Group } from "three";
-
 /** Temporary stand-in for a knight GLB. Keep this mesh simple to swap later. */
 export function HeroBox() {
-  const group = useRef<Group>(null);
-
-  useFrame((_, delta) => {
-    if (!group.current) return;
-    group.current.rotation.y += delta * 0.08;
-  });
-
   return (
-    <group ref={group} position={[0, 0.92, 0]}>
-      <mesh castShadow>
+    <group position={[0, 0.925, 0]}>
+      <mesh>
         <boxGeometry args={[0.72, 1.85, 0.46]} />
         <meshStandardMaterial
-          color="#161618"
-          metalness={0.42}
-          roughness={0.58}
+          color="#141416"
+          metalness={0.38}
+          roughness={0.62}
+        />
+      </mesh>
+      <mesh scale={1.02}>
+        <boxGeometry args={[0.72, 1.85, 0.46]} />
+        <meshBasicMaterial
+          color="#6a6a72"
+          wireframe
+          transparent
+          opacity={0.22}
         />
       </mesh>
     </group>
