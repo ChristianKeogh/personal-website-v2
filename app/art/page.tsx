@@ -1,0 +1,88 @@
+import { unstable_rethrow } from "next/navigation";
+import GalleryClient, { ArtItem } from "./gallery-client";
+
+export const dynamic = "force-dynamic";
+
+const MANIFEST_URL =
+  "https://images-ch.s3.eu-north-1.amazonaws.com/manifest.json";
+const IMAGE_HOST = "https://images-ch.s3.eu-north-1.amazonaws.com";
+
+const CATEGORY = {
+  personal: "Personal",
+  "professional-animation": "Production",
+} as const;
+
+function parseKey(key: string) {
+  const parts = key.split("/");
+  const root = parts[0];
+  const category = CATEGORY[root as keyof typeof CATEGORY];
+  if (!category || parts.some((part) => !part)) {
+    throw new Error(`Invalid gallery key: ${key}`);
+  }
+  if (root === "personal" && parts.length === 2) {
+    return { category, folder: "", file: parts[1] };
+  }
+  if (parts.length === 3) {
+    return { category, folder: parts[1], file: parts[2] };
+  }
+  throw new Error(`Invalid gallery key: ${key}`);
+}
+
+async function getImages(): Promise<ArtItem[]> {
+  const res = await fetch(MANIFEST_URL);
+  if (!res.ok) {
+    throw new Error(`Gallery manifest ${res.status} ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  if (!Array.isArray(data)) {
+    throw new Error("Gallery manifest must be a JSON array");
+  }
+
+  return data.map(
+    (entry: { key: string; description?: string; title?: string }) => {
+      const { category, folder, file } = parseKey(entry.key);
+      const description = entry.description ?? "";
+      return {
+        id: entry.key,
+        title: entry.title || description || file,
+        category,
+        url: `${IMAGE_HOST}/${entry.key}`,
+        description,
+        folder,
+      };
+    },
+  );
+}
+
+export const metadata = {
+  title: "Art",
+  description: "Production and personal work.",
+};
+
+export default async function ArtPage() {
+  try {
+    const items = await getImages();
+    return (
+      <div className="py-2">
+        <h1 className="mb-8 text-sm tracking-[0.22em] uppercase text-neutral-600">
+          Art
+        </h1>
+        <GalleryClient initialItems={items} />
+      </div>
+    );
+  } catch (error) {
+    unstable_rethrow(error);
+    return (
+      <div className="py-2">
+        <h1 className="mb-8 text-sm tracking-[0.22em] uppercase text-neutral-600">
+          Art
+        </h1>
+        <GalleryClient
+          initialItems={[]}
+          error={error instanceof Error ? error.message : String(error)}
+        />
+      </div>
+    );
+  }
+}

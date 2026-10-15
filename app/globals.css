@@ -1,0 +1,130 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+:root {
+  --background: #000000;
+  --foreground: #737373;
+  --sh-class: #8a8a8a;
+  --sh-identifier: #a3a3a3;
+  --sh-sign: #737373;
+  --sh-string: #9a9a9a;
+  --sh-keyword: #b0b0b0;
+  --sh-comment: #525252;
+  --sh-jsxliterals: #8a8a8a;
+  --sh-property: #a3a3a3;
+  --sh-entity: #a3a3a3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  background: #000;
+  color-scheme: dark;
+  min-width: 360px;
+}
+
+body {
+  background: transparent;
+  color: var(--foreground);
+}
+
+::selection {
+  background-color: #262626;
+  color: #a3a3a3;
+}
+
+.prose .anchor {
+  @apply absolute invisible no-underline;
+  margin-left: -1em;
+  padding-right: 0.5em;
+  width: 80%;
+  max-width: 700px;
+  cursor: pointer;
+}
+
+.anchor:hover {
+  @apply visible;
+}
+
+.prose a {
+  @apply underline transition-all decoration-neutral-700 underline-offset-2 decoration-[0.1em];
+}
+
+.prose .anchor:after {
+  @apply text-neutral-700;
+  content: "#";
+}
+
+.prose *:hover > .anchor {
+  @apply visible;
+}
+
+.prose pre {
+  @apply bg-neutral-950 rounded-sm overflow-x-auto border border-neutral-900 py-2 px-3 text-sm;
+}
+
+.prose code {
+  @apply px-1 py-0.5 rounded-sm;
+}
+
+.prose pre code {
+  @apply p-0;
+  border: initial;
+  line-height: 1.5;
+}
+
+.prose img {
+  @apply m-0;
+}
+
+.prose p {
+  @apply my-4 text-neutral-500;
+}
+
+.prose h1 {
+  @apply text-3xl font-medium tracking-tight mt-6 mb-2 text-neutral-400;
+}
+
+.prose h2 {
+  @apply text-xl font-medium tracking-tight mt-6 mb-2 text-neutral-400;
+}
+
+.prose h3,
+.prose h4 {
+  @apply text-lg font-medium tracking-tight mt-6 mb-2 text-neutral-400;
+}
+
+.prose strong {
+  @apply font-medium text-neutral-400;
+}
+
+.prose ul {
+  @apply list-disc pl-6;
+}
+
+.prose ol {
+  @apply list-decimal pl-6;
+}
+
+.prose > :first-child {
+  margin-top: 1.25em !important;
+  margin-bottom: 1.25em !important;
+}
+
+pre::-webkit-scrollbar {
+  display: none;
+}
+
+pre {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.title {
+  text-wrap: balance;
+}
