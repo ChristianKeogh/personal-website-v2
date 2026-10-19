@@ -1,0 +1,60 @@
+import { baseUrl } from "@/app/lib/site";
+import Link from "next/link";
+import type { ComponentType } from "react";
+import EconomyToy from "./components/economy-toy";
+import ExternalityToy from "./components/externality-toy";
+import HashScroll from "./components/hash-scroll";
+import IncentivesToy from "./components/incentives-toy";
+import LessonShell from "./components/lesson-shell";
+import MacroDashboard from "./components/macro-dashboard";
+import ScarcityToy from "./components/scarcity-toy";
+import ShockButtons from "./components/shock-buttons";
+import SupplyDemandToy from "./components/supply-demand-toy";
+import { lessons } from "./lessons";
+
+const title = "Basic economics";
+const description =
+  "What an economy is, then scarcity, prices, shocks, incentives, market failure and the headline numbers.";
+
+const interactives: Record<string, ComponentType> = {
+  "an-economy": EconomyToy,
+  "scarcity-trade-offs": ScarcityToy,
+  "supply-demand": SupplyDemandToy,
+  "equilibrium-shocks": ShockButtons,
+  incentives: IncentivesToy,
+  "markets-failure": ExternalityToy,
+  "gdp-inflation-unemployment": MacroDashboard
+};
+
+export const metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: `${baseUrl}/education/economics`
+  }
+};
+
+export default function EconomicsPage() {
+  return (
+    <article>
+      <HashScroll />
+      <Link
+        href="/education"
+        className="text-sm text-neutral-600 hover:text-neutral-400 transition-colors"
+      >
+        ← Education
+      </Link>
+      {lessons.map((lesson) => {
+        const Interactive = interactives[lesson.slug];
+
+        return (
+          <LessonShell key={lesson.slug} lesson={lesson}>
+            <Interactive />
+          </LessonShell>
+        );
+      })}
+    </article>
+  );
+}
